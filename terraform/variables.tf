@@ -3,3 +3,8 @@ variable "aws_region" {
   type        = string
   default     = "us-east-1"
 }
+
+variable "error_sns_topic" {
+  description = "SNS Topic ARN to trigger on lambda failure"
+  type        = string
+}
