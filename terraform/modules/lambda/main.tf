@@ -9,7 +9,7 @@ resource "aws_lambda_function" "discontent_backend" {
 
   environment {
     variables = {
-      SECRET_NAME = module.secrets_manager.secret_name
+      SECRET_NAME = var.secret_name
     }
   }
 }
