@@ -3,7 +3,7 @@ module "iam" {
 }
 
 module "secrets_manager" {
-  source = "./secrets_manager"
+  source = "./modules/secrets_manager"
 }
 
 module "archive" {
