@@ -1,5 +1,5 @@
 resource "aws_iam_role" "discontent_backend" {
-  name               = "destiny-insights-backend"
+  name               = "discontent-backend"
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",

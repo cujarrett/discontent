@@ -15,7 +15,7 @@ resource "aws_lambda_function" "discontent_backend" {
 }
 
 resource "aws_lambda_function_event_invoke_config" "discontent_backend_event_invoke_config" {
-  function_name                = aws_lambda_function.destiny_insights_backend.arn
+  function_name                = aws_lambda_function.discontent_backend.arn
   maximum_event_age_in_seconds = 60
   maximum_retry_attempts       = 0
 
