@@ -12,3 +12,8 @@ variable "secret_name" {
     description = "Secret name"
     type        = string
 }
+
+variable "error_sns_topic" {
+  description = "SNS Topic ARN to trigger on lambda failure"
+  type        = string
+}
