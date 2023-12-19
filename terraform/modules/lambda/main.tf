@@ -6,12 +6,6 @@ resource "aws_lambda_function" "discontent_backend" {
   runtime       = "nodejs20.x"
   memory_size   = 512
   timeout       = 60
-
-  environment {
-    variables = {
-      SECRET_NAME = var.secret_name
-    }
-  }
 }
 
 resource "aws_lambda_function_event_invoke_config" "discontent_backend_event_invoke_config" {
