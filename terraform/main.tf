@@ -1,5 +1,6 @@
 module "iam" {
-  source = "./modules/iam"
+  error_sns_topic = var.error_sns_topic
+  source          = "./modules/iam"
 }
 
 module "archive" {
