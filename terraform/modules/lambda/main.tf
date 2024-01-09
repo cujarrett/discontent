@@ -21,8 +21,8 @@ resource "aws_lambda_function_event_invoke_config" "discontent_backend_event_inv
 }
 
 resource "aws_lambda_permission" "discontent_backend" {
-  statement_id  = "AllowAPIGatewayInvoke"
+  statement_id  = "AllowExecutionFromAlexa"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.discontent_backend.arn
-  principal     = "apigateway.amazonaws.com"
+  principal     = "alexa-appkit.amazon.com"
 }
