@@ -41,6 +41,29 @@ resource "aws_iam_role_policy_attachment" "attach_logs" {
   policy_arn = aws_iam_policy.discontent_backend_logs.arn
 }
 
+resource "aws_iam_policy" "discontent_backend_sns" {
+  name        = "discontent-backend-sns"
+  description = "Adds sns access"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "sns:Publish",
+      "Resource": "${var.error_sns_topic}"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "attach_sns" {
+  role       = aws_iam_role.discontent_backend.name
+  policy_arn = aws_iam_policy.discontent_backend_sns.arn
+}
+
 output "discontent_backend_role_arn" {
   value = aws_iam_role.discontent_backend.arn
 }
