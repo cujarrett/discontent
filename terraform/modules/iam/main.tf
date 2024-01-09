@@ -1,39 +1,39 @@
-resource "aws_iam_role" "discontent_backend" {
-  name               = "discontent-backend"
-  assume_role_policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": {
-    "Action": "sts:AssumeRole",
-    "Principal": {
-      "Service": "lambda.amazonaws.com"
-    },
-    "Effect": "Allow"
+# Backend
+data "aws_iam_policy_document" "discontent_backend_assume_role_policy" {
+  statement {
+    actions = [
+      "sts:AssumeRole"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
   }
 }
-POLICY
+
+resource "aws_iam_role" "discontent_backend" {
+  name               = "discontent-backend"
+  assume_role_policy = data.aws_iam_policy_document.discontent_backend_assume_role_policy.json
+}
+
+# Logs
+data "aws_iam_policy_document" "discontent_backend_logs_policy" {
+  statement {
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "arn:aws:logs:*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "discontent_backend_logs" {
   name        = "discontent-backend-logs"
   description = "Adds logging access"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      "Resource": "arn:aws:logs:*"
-    }
-  ]
-}
-EOF
+  policy      = data.aws_iam_policy_document.discontent_backend_logs_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "attach_logs" {
@@ -41,29 +41,26 @@ resource "aws_iam_role_policy_attachment" "attach_logs" {
   policy_arn = aws_iam_policy.discontent_backend_logs.arn
 }
 
+# SNS
+data "aws_iam_policy_document" "discontent_backend_sns_policy" {
+  statement {
+    actions = [
+      "sns:Publish"
+    ]
+    resources = [
+      var.error_sns_topic
+    ]
+  }
+}
+
 resource "aws_iam_policy" "discontent_backend_sns" {
   name        = "discontent-backend-sns"
   description = "Adds sns access"
 
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "sns:Publish",
-      "Resource": "${var.error_sns_topic}"
-    }
-  ]
-}
-EOF
+  policy = data.aws_iam_policy_document.discontent_backend_sns_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "attach_sns" {
   role       = aws_iam_role.discontent_backend.name
   policy_arn = aws_iam_policy.discontent_backend_sns.arn
-}
-
-output "discontent_backend_role_arn" {
-  value = aws_iam_role.discontent_backend.arn
 }

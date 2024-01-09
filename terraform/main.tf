@@ -1,6 +1,6 @@
 module "iam" {
-  error_sns_topic = var.error_sns_topic
   source          = "./modules/iam"
+  error_sns_topic = var.error_sns_topic
 }
 
 module "archive" {
@@ -9,7 +9,7 @@ module "archive" {
 
 module "lambda" {
   source                       = "./modules/lambda"
-  file_placeholder_output_path = module.archive.file_placeholder_output_path
-  discontent_backend_role_arn  = module.iam.discontent_backend_role_arn
   error_sns_topic              = var.error_sns_topic
+  discontent_backend_role_arn  = module.iam.discontent_backend_role_arn
+  file_placeholder_output_path = module.archive.file_placeholder_output_path
 }
